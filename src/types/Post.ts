@@ -3,8 +3,8 @@ export type Post = {
   id: string;
   title: string;
   description: string;
-  tags: string[];
   imageUrl: string;
-  createdAt: string;
+  tags: string[];
+  createdAt: Date;
   volunteerName: string;
 };
