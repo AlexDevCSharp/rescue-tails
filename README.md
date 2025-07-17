@@ -1,4 +1,65 @@
-# React + TypeScript + Vite
+# 🐾 Rescue Tails Ukraine
+
+A volunteer-powered platform to support stray and shelter animals in Ukraine.  
+Built with ❤️ using React, TypeScript, Tailwind CSS and Firebase.
+
+---
+
+## 🌍 Mission
+
+Rescue Tails Ukraine connects kind people with animals in need — enabling donations, adoptions, fostering, and awareness.
+
+---
+
+## 🚀 Features
+
+- Beautiful responsive UI (from Figma)
+- Post listings with filters and tags
+- Detailed post view `/posts/:id`
+- Unified login/signup form
+- Partner showcase
+- Volunteer contact form
+- User dashboard `/account`
+- Admin-ready layout
+- Firebase Auth & Firestore-ready
+
+---
+
+## 📁 Pages
+
+| Path           | Description                     |
+|----------------|----------------------------------|
+| `/`            | Home                             |
+| `/posts`       | All posts                        |
+| `/posts/:id`   | Post details                     |
+| `/about`       | Our story                        |
+| `/support`     | How to help                      |
+| `/contact`     | Contact form                     |
+| `/stories`     | Gallery                          |
+| `/calendar`    | Upcoming events                  |
+| `/partners`    | Collaborators                    |
+| `/signin`      | Auth page (login/register)       |
+| `/account`     | User settings dashboard          |
+
+---
+
+## 🧠 Tech Stack
+
+- **Frontend**: React + TypeScript + Vite
+- **Styling**: Tailwind CSS
+- **Auth & DB (planned)**: Firebase Auth, Firestore, Cloud Storage
+- **Deployment**: GitHub Pages / Firebase / Vercel
+
+---
+
+## 📥 Local Setup
+
+```bash
+git clone https://github.com/AlexDevCSharp/rescue-tails.git
+cd rescue-tails
+npm install
+npm run dev
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -67,3 +128,6 @@ export default tseslint.config([
   },
 ])
 ```
+✨ Author
+Made with ❤️ by @AlexDevCSharp
+
