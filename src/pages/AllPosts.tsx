@@ -1,88 +1,78 @@
-// src/pages/AllPosts.tsx
-import { useState } from "react";
-import PostCard from "../components/PostCard";
-import Pagination from "../components/Pagination";
+import { useEffect, useState } from "react";
+import { collection, getDocs, Timestamp } from "firebase/firestore";
+import { db } from "../firebase";
+import type { Post } from "../types/Post";
 
-const mockPosts = [
-  { id: 1, image: "https://placekitten.com/300/400" },
-  { id: 2, image: "https://placekitten.com/301/400" },
-  { id: 3, image: "https://placekitten.com/302/400" },
-  { id: 4, image: "https://placekitten.com/303/400" },
-  { id: 5, image: "https://placekitten.com/304/400" },
-  { id: 6, image: "https://placekitten.com/305/400" },
-  { id: 7, image: "https://placekitten.com/306/400" },
-];
+type FirestorePost = {
+  title: string;
+  description: string;
+  imageUrl: string;
+  tags: string[];
+  createdAt: Timestamp;
+  // Пока volunteerName нет в базе — сделаем его заглушкой
+};
 
 const AllPosts = () => {
-  const [filters, setFilters] = useState({
-    type: "",
-    location: "",
-    tag: "",
-    volunteer: "",
-  });
+  const [posts, setPosts] = useState<Post[]>([]);
 
-  const handleChange = (key: string, value: string) => {
-    setFilters({ ...filters, [key]: value });
-  };
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const snapshot = await getDocs(collection(db, "posts"));
+      const fetchedPosts: Post[] = snapshot.docs.map((doc) => {
+        const data = doc.data() as FirestorePost;
+
+        return {
+          id: doc.id,
+          title: data.title,
+          description: data.description,
+          imageUrl: data.imageUrl,
+          tags: data.tags,
+          createdAt: data.createdAt.toDate(),
+          volunteerName: "", // 👈 временная заглушка
+        };
+      });
+
+      // Sort by date descending
+      fetchedPosts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+      setPosts(fetchedPosts);
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
-    <div className="flex px-6 py-8 gap-8 bg-white">
-      {/* Filters */}
-      <aside className="w-full max-w-[250px] space-y-4">
-        <h2 className="text-xl font-semibold">Filters</h2>
-        {["Animal Type", "Location", "Tags", "Volunteers"].map((label, i) => (
-          <div key={label}>
-            <label className="block mb-1 text-sm font-medium">{label}</label>
-            <select
-              className="w-full border rounded-md px-3 py-2 text-sm"
-              value={filters[label.toLowerCase().replace(" ", "") as keyof typeof filters]}
-              onChange={(e) =>
-                handleChange(label.toLowerCase().replace(" ", ""), e.target.value)
-              }
-            >
-              <option value="">Select</option>
-              <option value="Option1">Option 1</option>
-              <option value="Option2">Option 2</option>
-            </select>
+    <div className="px-6 py-10 max-w-7xl mx-auto space-y-8">
+      <h1 className="text-3xl font-bold">All Posts</h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {posts.map((post) => (
+          <div key={post.id} className="bg-white shadow rounded-xl overflow-hidden">
+            <img
+              src={post.imageUrl}
+              alt={post.title}
+              className="h-48 w-full object-cover"
+            />
+            <div className="p-4 space-y-2">
+              <h2 className="text-lg font-semibold">{post.title}</h2>
+              <p className="text-gray-500 text-sm">
+                {post.createdAt.toLocaleDateString()}
+              </p>
+              <div className="flex flex-wrap gap-2 text-xs">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+              <p className="text-sm text-gray-700 line-clamp-2">{post.description}</p>
+            </div>
           </div>
         ))}
-        <button className="w-full mt-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-md">
-          Apply Filters
-        </button>
-      </aside>
-
-      {/* Posts grid */}
-      <main className="flex-1">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold">All Posts</h1>
-            <p className="text-sm text-gray-600">Explore all posts from our community</p>
-          </div>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Search"
-              className="border rounded-md px-3 py-1 text-sm"
-            />
-            <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded-md">
-              Adopt
-            </button>
-            <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md">
-              Volunteer
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {mockPosts.map((post) => (
-            <PostCard key={post.id} image={post.image} />
-          ))}
-        </div>
-
-        <div className="mt-8">
-          <Pagination current={1} total={5} />
-        </div>
-      </main>
+      </div>
     </div>
   );
 };
