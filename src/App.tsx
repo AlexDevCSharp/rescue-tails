@@ -12,6 +12,7 @@ import Partners from "./pages/Partners";
 import Signin from "./pages/Signin";
 import Account from "./pages/Account";
 import PostDetails from "./pages/PostDetails";
+import TestUpload from "./pages/TestUpload";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/signin" element={<Layout><Signin /></Layout>} />
         <Route path="/account" element={<Layout><Account /></Layout>} />
         <Route path="/posts/:id" element={<Layout><PostDetails /></Layout>} />
+        <Route path="/test-upload" element={<Layout><TestUpload /></Layout>} />
       </Routes>
     </BrowserRouter>
   );
