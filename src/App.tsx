@@ -13,6 +13,7 @@ import Signin from "./pages/Signin";
 import Account from "./pages/Account";
 import PostDetails from "./pages/PostDetails";
 import TestUpload from "./pages/TestUpload";
+import CreatePost from "./pages/CreatePost";
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/account" element={<Layout><Account /></Layout>} />
         <Route path="/posts/:id" element={<Layout><PostDetails /></Layout>} />
         <Route path="/test-upload" element={<Layout><TestUpload /></Layout>} />
+        <Route path="/create-post" element={<Layout><CreatePost /></Layout>} />
       </Routes>
     </BrowserRouter>
   );
