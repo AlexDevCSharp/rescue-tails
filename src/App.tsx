@@ -15,6 +15,7 @@ import PostDetails from "./pages/PostDetails";
 import TestUpload from "./pages/TestUpload";
 import CreatePost from "./pages/CreatePost";
 import CreateVolunteer from "./pages/CreateVolunteer";
+import Volunteers from "./pages/Volunteers";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/test-upload" element={<Layout><TestUpload /></Layout>} />
         <Route path="/create-post" element={<Layout><CreatePost /></Layout>} />
         <Route path="/create-volunteer" element={<Layout><CreateVolunteer /></Layout>} />
+        <Route path="/volunteers" element={<Layout><Volunteers /></Layout>} />
       </Routes>
     </BrowserRouter>
   );

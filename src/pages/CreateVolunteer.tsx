@@ -11,13 +11,7 @@ const CreateVolunteer = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState("");
 
-  const availableTags = [
-    "Dogs",
-    "Cats",
-    "Medical",
-    "Transport",
-    "Foster",
-  ];
+  const availableTags = ["Dog Care", "Cat Care", "Medical"];
 
   const handleCreate = async () => {
     try {
@@ -30,7 +24,7 @@ const CreateVolunteer = () => {
         imageUrl,
         createdAt: serverTimestamp(),
       });
-      window.location.href = "/volonteers";
+      window.location.href = "/volunteers";
     } catch (err) {
       console.error("Failed to create volunteer", err);
       alert("Error creating volunteer");
