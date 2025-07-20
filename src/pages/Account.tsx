@@ -1,4 +1,3 @@
-// src/pages/Account.tsx
 import {
   FaHome,
   FaHeart,
@@ -9,12 +8,23 @@ import {
   FaPen,
 } from "react-icons/fa";
 import { Switch } from "@headlessui/react";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import type { User } from "firebase/auth";
+import { auth } from "../firebase";
 
 const Account = () => {
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [pushNotifications, setPushNotifications] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 flex text-sm text-gray-800">
@@ -22,8 +32,10 @@ const Account = () => {
       <aside className="w-64 bg-white border-r px-6 py-8">
         <div className="flex flex-col items-center mb-10">
           <div className="w-20 h-20 rounded-full bg-gray-300 mb-2" />
-          <div className="font-semibold text-base">Elena</div>
-          <div className="text-xs text-gray-500">@elena_s</div>
+          <div className="font-semibold text-base">
+            {user?.displayName || "Anonymous"}
+          </div>
+          <div className="text-xs text-gray-500">{user?.email || "No email"}</div>
         </div>
 
         <nav className="space-y-5">
@@ -40,10 +52,9 @@ const Account = () => {
         <h1 className="text-xl font-semibold mb-8">Settings</h1>
 
         <Section title="Profile">
-          <Field label="Name" value="Elena Smirnova" />
-          <Field label="Email" value="helen_s@email.com" />
-          <Field label="Phone number" value="+380 97 123 4567" />
-          <Field label="Password" value="Change password" isLink />
+          <Field label="Name" value={user?.displayName || "Not set"} />
+          <Field label="Email" value={user?.email || "Not set"} />
+          <Field label="UID" value={user?.uid || "Not available"} />
         </Section>
 
         <Section title="Notifications">
@@ -102,7 +113,13 @@ const SidebarItem = ({
   </div>
 );
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+const Section = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => (
   <div className="mb-10">
     <h2 className="text-sm font-medium mb-4">{title}</h2>
     <div className="space-y-4">{children}</div>
@@ -123,7 +140,7 @@ const Field = ({
       <div className="text-gray-500">{label}</div>
       <div className="font-medium">{value}</div>
     </div>
-    <FaPen className="text-gray-400 hover:text-blue-600 cursor-pointer" />
+    {isLink && <FaPen className="text-gray-400 hover:text-blue-600 cursor-pointer" />}
   </div>
 );
 
